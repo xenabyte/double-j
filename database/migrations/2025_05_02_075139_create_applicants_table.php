@@ -28,7 +28,8 @@ class CreateApplicantsTable extends Migration
             $table->string('cv')->nullable();
             $table->string('cover_letter')->nullable();
             $table->string('image')->nullable(); 
-            $table->string('slug')->nullable();            
+            $table->string('slug')->nullable(); 
+            $table->string('upload_folder')->nullable();           
             $table->rememberToken();
             $table->timestamps();
             $table->softDeletes();

@@ -32,6 +32,7 @@ class Applicant extends Authenticatable
         'cover_letter',
         'image',
         'slug',
+        'upload_folder',
     ];
 
     /**

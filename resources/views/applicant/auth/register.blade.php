@@ -99,7 +99,7 @@
         </div>
         <div class="card-body pt-0"> 
             <div>
-                <a href="index.html">
+                <a href="{{ url('/applicant/register') }}">
                     <div class="avatar-md profile-user-wid mb-4">
                         <span class="avatar-title rounded-circle bg-light">
                             <img src="{{ !empty($pageGlobalData->setting) ? asset($pageGlobalData->setting->favicon) : '' }}" alt="" class="rounded-circle" height="34">

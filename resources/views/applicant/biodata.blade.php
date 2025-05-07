@@ -25,7 +25,7 @@
 
 <div class="row">
     <div class="col-xl-4">
-        <div class="card overflow-hidden">
+        {{-- <div class="card overflow-hidden">
             <div class="bg-primary-subtle">
                 <div class="row">
                     <div class="col-7">
@@ -45,6 +45,34 @@
                             <img src="{{ $applicant->image ? asset($applicant->image) : asset('assets/images/users/avatar-1.jpg') }}" alt="Profile Image" class="img-thumbnail rounded-circle">
                         </div>
                         <h5 class="font-size-15 text">{{ $applicant->last_name .' '. $applicant->othernames ?? 'Cynthia Price' }}</h5>
+                        <p class="text-muted mb-0 text-truncate">Applicant</p>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+        <div class="card overflow-hidden">
+            <!-- Header with background -->
+            <div class="bg-primary-subtle p-3 d-flex align-items-center justify-content-between">
+                <div>
+                    <h5 class="text-primary mb-0">Welcome {{ $applicant->last_name ?? 'Applicant' }}!</h5>
+                </div>
+                <img src="{{ asset('assets/images/profile-img.png') }}" alt="" class="img-fluid rounded" style="max-width: 120px;">
+            </div>
+        
+            <!-- Profile info section -->
+            <div class="card-body pt-0">
+                <div class="d-flex align-items-start gap-3 mt-3">
+                    <!-- Bigger vertical image -->
+                    <div class="flex-shrink-0">
+                        <img src="{{ $applicant->image ? asset($applicant->image) : asset('assets/images/users/avatar-1.jpg') }}" alt="Profile Image" class="img-thumbnail rounded" style="width: 100px; height: auto; border-radius: 10px !important;">
+                    </div>
+        
+                    <!-- Name and role aligned vertically -->
+                    <div class="flex-grow-1">
+                        <h5 class="font-size-15 text-truncate mb-1">
+                            {{ $applicant->last_name . ' ' . $applicant->othernames ?? 'Cynthia Price' }}
+                        </h5>
                         <p class="text-muted mb-0 text-truncate">Applicant</p>
                     </div>
                 </div>
