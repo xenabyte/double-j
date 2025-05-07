@@ -20,17 +20,6 @@ use Carbon\Carbon;
 
 class AdminController extends Controller
 {
-    //
-    // public function index(){
-    //     $setting = Setting::first();
-    //     if(empty($setting->favicon) || empty($setting->site_name) || empty($setting->logo) || empty($setting->description)){
-    //         return view('admin.siteSettings', [
-    //             'setting' => $setting
-    //         ]);
-    //     }
-
-    //     return view('admin.home');
-    // }
 
     public function index(){
         $setting = Setting::first();

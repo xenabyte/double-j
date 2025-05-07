@@ -71,7 +71,7 @@ Route::group(['prefix' => 'client'], function () {
 });
 
 Route::group(['prefix' => 'applicant'], function () {
-  Route::get('/', [App\Http\Controllers\Applicant\Auth\LoginController::class, 'showLoginForm'])->name('client.login');
+  Route::get('/', [App\Http\Controllers\Applicant\Auth\LoginController::class, 'showLoginForm'])->name('applicant.login');
   Route::get('/login', [App\Http\Controllers\Applicant\Auth\LoginController::class, 'showLoginForm'])->name('login');
   Route::post('/login', [App\Http\Controllers\Applicant\Auth\LoginController::class, 'login']);
   Route::post('/logout', [App\Http\Controllers\Applicant\Auth\LoginController::class, 'logout'])->name('logout');
@@ -83,4 +83,10 @@ Route::group(['prefix' => 'applicant'], function () {
   Route::post('/password/reset', [App\Http\Controllers\Applicant\Auth\ResetPasswordController::class, 'reset'])->name('password.email');
   Route::get('/password/reset', [App\Http\Controllers\Applicant\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.reset');
   Route::get('/password/reset/{token}', [App\Http\Controllers\Applicant\Auth\ResetPasswordController::class, 'showResetForm']);
+
+  Route::get('/home', [App\Http\Controllers\Applicant\ApplicantController::class, 'index'])->name('home')->middleware(['auth:applicant']);
+
+  Route::get('/biodata', [App\Http\Controllers\Applicant\ApplicantController::class, 'biodata'])->name('biodata')->middleware(['auth:applicant']);
+  Route::post('/updateBiodata', [App\Http\Controllers\Applicant\ApplicantController::class, 'updateBiodata'])->name('updateBiodata')->middleware(['auth:applicant']);
+
 });

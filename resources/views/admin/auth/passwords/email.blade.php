@@ -21,7 +21,7 @@
         <a href="{{ url('/') }}">
             <div class="avatar-md profile-user-wid mb-4">
                 <span class="avatar-title rounded-circle bg-grey">
-                    <img src=" {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->favicon:null }}" alt="" class="rounded avatar-sm" height="15">
+                    <img src=" {{ !empty($pageGlobalData->setting) ? asset($pageGlobalData->setting->favicon) : '' }}" alt="" class="rounded avatar-sm" height="15">
                 </span>
             </div>
         </a>

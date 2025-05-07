@@ -9,7 +9,7 @@
     <meta content="{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->description : "Consultation Made Easy" }}" name="description" />
     <meta content="sky-hackeR(+2348082574927)" name="author" />
     <!-- App favicon -->
-    <link rel="shortcut icon" href="{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->favicon : null }}">
+    <link rel="shortcut icon" href="{{ !empty($pageGlobalData->setting) ? asset($pageGlobalData->setting->favicon) : '' }}">
 
 
     <!-- Bootstrap Css -->
@@ -32,7 +32,7 @@
                         </div>
                         <div class="mt-5 text-center">
                             <div>
-                                <p>© <script>document.write(new Date().getFullYear())</script> {{ env('APP') }}.</p>
+                                <p>© <script>document.write(new Date().getFullYear())</script> {{ env('APP_AUTHOR') }}.</p>
                             </div>
                         </div>
                     </div>
