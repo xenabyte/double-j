@@ -6,7 +6,7 @@
         <div class="col-7">
             <div class="text-primary p-4">
                 <h5 class="text-primary">Welcome Back !</h5>
-                <p>Sign in to continue to {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} Applicant Dashboard.</p>
+                <p>Sign in to continue to {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} Employee Dashboard.</p>
             </div>
         </div>
         <div class="col-5 align-self-end">
@@ -33,7 +33,7 @@
         </a>
     </div>
     <div class="p-2">
-        <form class="form-horizontal" method="POST" action="{{ url('/applicant/login') }}">
+        <form class="form-horizontal" method="POST" action="{{ url('/employee/login') }}">
             @csrf
             <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="email" class="form-label">Email Address</label>

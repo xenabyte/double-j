@@ -1,0 +1,32 @@
+<?php
+
+namespace App\Http\Controllers\Employee;
+
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Str;
+
+use App\Models\Employee;
+
+use SweetAlert;
+use Alert;
+use Log;
+use Carbon\Carbon;
+
+class EmployeeController extends Controller
+{
+    //
+    public function index(){
+        $employee = Auth::guard('employee')->user();
+
+        return view('employee.biodata', [
+            'employee' => $employee
+        ]);
+    }
+}

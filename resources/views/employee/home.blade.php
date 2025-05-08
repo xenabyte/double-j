@@ -1,4 +1,4 @@
-@extends('employee.layout.auth')
+@extends('employee.layout.dashboard')
 
 @section('content')
 <div class="container">

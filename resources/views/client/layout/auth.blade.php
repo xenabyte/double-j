@@ -4,7 +4,7 @@
     
 <head>
     <meta charset="utf-8" />
-    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Applicant Authentication</title>
+    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Client Authentication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->description : "Consultation Made Easy" }}" name="description" />
     <meta content="sky-hackeR(+2348082574927)" name="author" />
@@ -25,17 +25,11 @@
         <div class="account-pages my-5 pt-sm-5">
             <div class="container">
                 <div class="row justify-content-center">
-                    <div class="col-md-8 col-lg-6 col-xl-5">
-                        <div class="card overflow-hidden">
+                    
 
-                            @yield('content')
-                        </div>
-                        <div class="mt-5 text-center">
-                            <div>
-                                <p>© <script>document.write(new Date().getFullYear())</script> {{ env('APP') }}.</p>
-                            </div>
-                        </div>
-                    </div>
+                    @yield('content')
+                        
+                
                 </div>
             </div>
         </div>

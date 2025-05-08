@@ -4,7 +4,7 @@
     
 <head>
     <meta charset="utf-8" />
-    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Applicant Authentication</title>
+    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Employee Authentication</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->description : "Consultation Made Easy" }}" name="description" />
     <meta content="sky-hackeR(+2348082574927)" name="author" />

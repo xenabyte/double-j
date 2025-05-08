@@ -52,6 +52,8 @@ Route::group(['prefix' => 'employee'], function () {
   Route::get('/password/reset', [App\Http\Controllers\Employee\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.reset');
   Route::get('/password/reset/{token}', [App\Http\Controllers\Employee\Auth\ResetPasswordController::class, 'showResetForm']);
 
+  Route::get('/home', [App\Http\Controllers\Employee\EmployeeController::class, 'index'])->name('home')->middleware(['auth:employee']);
+
 });
 
 Route::group(['prefix' => 'client'], function () {
@@ -67,6 +69,8 @@ Route::group(['prefix' => 'client'], function () {
   Route::post('/password/reset', [App\Http\Controllers\Client\Auth\ResetPasswordController::class, 'reset'])->name('password.email');
   Route::get('/password/reset', [App\Http\Controllers\Client\Auth\ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.reset');
   Route::get('/password/reset/{token}', [App\Http\Controllers\Client\Auth\ResetPasswordController::class, 'showResetForm']);
+
+  Route::get('/home', [App\Http\Controllers\Client\ClientController::class, 'index'])->name('home')->middleware(['auth:client']);
 
 });
 

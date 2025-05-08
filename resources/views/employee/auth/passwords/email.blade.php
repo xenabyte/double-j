@@ -8,7 +8,7 @@
         <div class="col-7">
             <div class="text-primary p-4">
                 <h5 class="text-primary"> Reset Password</h5>
-                <p>Reset Password with  {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} for Applicants.</p>
+                <p>Reset Password with  {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} for Employee.</p>
             </div>
         </div>
         <div class="col-5 align-self-end">
@@ -34,7 +34,7 @@
             </div>
         @endif
        
-        <form class="form-horizontal" method="POST" action="{{ url('/applicant/password/email') }}">
+        <form class="form-horizontal" method="POST" action="{{ url('/employee/password/email') }}">
             @csrf
             <div class="mb-3{{ $errors->has('email') ? ' has-error' : '' }}">
                 <label for="email" class="form-label">Email Address</label>

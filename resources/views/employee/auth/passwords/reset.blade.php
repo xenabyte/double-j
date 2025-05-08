@@ -5,7 +5,7 @@
     <div class="col-7">
         <div class="text-primary p-4">
             <h5 class="text-primary"> Reset Password</h5>
-            <p>Reset Password with  {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} for Applicant.</p>
+            <p>Reset Password with  {{ !empty($pageGlobalData->setting)?$pageGlobalData->setting->site_name:null }} for Employee.</p>
         </div>
     </div>
     <div class="col-5 align-self-end">
@@ -31,7 +31,7 @@
         </a>
     </div>
     <div class="p-2">
-        <form class="form-horizontal" method="POST" action="{{ url('/applicant/password/reset') }}">
+        <form class="form-horizontal" method="POST" action="{{ url('/employee/password/reset') }}">
             @csrf
 
             <input type="hidden" name="token" value="{{ $token }}">
