@@ -35,6 +35,13 @@ Route::group(['prefix' => 'admin'], function () {
   Route::get('/home', [App\Http\Controllers\Admin\AdminController::class, 'index'])->name('home')->middleware(['auth:admin']);
   Route::get('/siteSettings', [App\Http\Controllers\Admin\AdminController::class, 'siteSettings'])->name('siteSettings')->middleware(['auth:admin']);
 
+  Route::get('/applicants', [App\Http\Controllers\Admin\AdminController::class, 'applicants'])->name('applicants')->middleware(['auth:admin']);
+  Route::post('/newApplicant', [App\Http\Controllers\Admin\AdminController::class, 'newApplicant'])->name('newApplicant')->middleware(['auth:admin']);
+  Route::get('/viewApplicant/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'viewApplicant'])->name('viewApplicant')->middleware(['auth:admin']);
+  Route::post('/updateApplicant', [App\Http\Controllers\Admin\AdminController::class, 'updateApplicant'])->name('updateApplicant')->middleware(['auth:admin']);
+  Route::post('/deleteApplicant', [App\Http\Controllers\Admin\AdminController::class, 'deleteApplicant'])->name('deleteApplicant')->middleware(['auth:admin']);
+
+
 
 });
 

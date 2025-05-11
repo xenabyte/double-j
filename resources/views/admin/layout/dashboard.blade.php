@@ -142,6 +142,12 @@
                                 </a>
                             </li>                      
 
+                            <li>
+                                <a href="{{ url('/admin/applicants') }}" class="waves-effect">
+                                    <i class="bx bx-group"></i>
+                                    <span key="t-settings">Applicants</span>
+                                </a>
+                            </li> 
                            
 
                             <li class="menu-title" key="t-auth"></li>
