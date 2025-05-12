@@ -1,5 +1,5 @@
 @php
-    $admin = Auth::guard('client')->user();
+    $client = Auth::guard('client')->user();
 @endphp
 <!doctype html>
 <html lang="en">
@@ -8,7 +8,7 @@
 <head>
         
     <meta charset="utf-8" />
-    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Client Dashboard</title>
+    <title>{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->site_name : "Double J HR" }} - Client  Dashboard</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta content="{{ !empty($pageGlobalData->setting) ? $pageGlobalData->setting->description : "Consultation Made Easy" }}" name="description" />
     <meta content="skyhackeR(+2348082574927)" name="author" />
@@ -100,7 +100,7 @@
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="{{ $client->image ? asset($client->image) : asset('assets/images/users/avatar-1.jpg') }}"
+                                <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg') }}"
                                     alt="Header Avatar">
                                 <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $client->name }}</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -133,7 +133,15 @@
                                     <i class="bx bx-home-circle"></i>
                                     <span key="t-dashboard">Home</span>
                                 </a>
+                            </li>      
+                            
+                            <li>
+                                <a href="{{ url('/client/biodata') }}" class="waves-effect">
+                                    <i class="bx bx-home-circle"></i>
+                                    <span key="t-dashboard">Client Profile</span>
+                                </a>
                             </li>                      
+
 
                            
 

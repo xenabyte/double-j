@@ -148,6 +148,13 @@
                                     <span key="t-settings">Applicants</span>
                                 </a>
                             </li> 
+
+                            <li>
+                                <a href="{{ url('/admin/jobPosting') }}" class="waves-effect">
+                                    <i class="bx bx-folder-open"></i>
+                                    <span key="t-settings">Vacancies</span>
+                                </a>
+                            </li> 
                            
 
                             <li class="menu-title" key="t-auth"></li>

@@ -1,66 +1,3 @@
-{{-- @extends('admin.layout.dashboard')
-
-@section('content')
-
-<div class="row">
-    <div class="col-12">
-        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0 font-size-18">Applicants</h4>
-            <div class="page-title-right">
-                <ol class="breadcrumb m-0">
-                    <li class="breadcrumb-item active">Applicants</li>
-                </ol>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="row">
-    <div class="col-12">
-        <div class="card">
-            <div class="card-header align-items-center d-flex">
-                <h4 class="card-title mb-0 flex-grow-1"></h4>
-                <div class="flex-shrink-0">
-                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addApplicant">Add Applicant</button>
-                </div>
-            </div><!-- end card header -->
-            <div class="card-body">
-                <table id="datatable-buttons" class="table table-bordered dt-responsive nowrap w-100">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th>Name</th>
-                        <th>Email</th>
-                        <th>Phone Number</th>
-                        <th>City</th>
-                        <th>Actions</th>
-                    </tr>
-                    </thead>
-
-
-                    <tbody>
-                        @foreach($applicants as $applicant)
-                            <tr>
-                                <td><img src="{{ $applicant->image ? asset($applicant->image) : asset('assets/images/users/avatar-1.jpg') }}" alt="" width="50" height="50" style="object-fit: cover;"></td>
-                                <td>{{ ($applicant->title .' '.$applicant->last_name.' '.$applicant->othernames) }}</td>
-                                <td>{{ $applicant->email }}</td>
-                                <td>{{ $applicant->phone }}</td>
-                                <td>{{ $applicant->city }}</td>
-                                <td>$320,800</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div> <!-- end col -->
-</div> <!-- end row -->
-
-@endsection --}}
-
-
-
-
 @extends('admin.layout.dashboard')
 
 @section('content')
@@ -109,7 +46,6 @@
                                 <td>{{ $applicant->phone }}</td>
                                 <td>{{ $applicant->city }}</td>
                                 <td>
-                                    {{-- <a href="{{ url('admin/applicant/'.$applicant->slug) }}" class="btn btn-primary m-1"><i class="mdi mdi-comment-eye"></i></a> --}}
                                     <a href="{{ url('admin/viewApplicant/'.$applicant->slug) }}" class="btn btn-primary m-1">
                                         <i class="mdi mdi-comment-eye"></i>
                                     </a>                                    
@@ -120,7 +56,7 @@
 
                             <!-- Add Applicant Modal -->
                             <div class="modal fade" id="addApplicant" tabindex="-1" aria-labelledby="addApplicantLabel" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
+                                <div class="modal-dialog modal-xl">
                                 <form action="{{ url('/admin/newApplicant') }}" method="POST" enctype="multipart/form-data">
                                     @csrf
                                     <div class="modal-content">

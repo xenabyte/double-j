@@ -41,6 +41,7 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/updateApplicant', [App\Http\Controllers\Admin\AdminController::class, 'updateApplicant'])->name('updateApplicant')->middleware(['auth:admin']);
   Route::post('/deleteApplicant', [App\Http\Controllers\Admin\AdminController::class, 'deleteApplicant'])->name('deleteApplicant')->middleware(['auth:admin']);
 
+  Route::get('/jobPosting', [App\Http\Controllers\Admin\AdminController::class, 'jobPosting'])->name('jobPosting')->middleware(['auth:admin']);
 
 
 });
@@ -78,6 +79,8 @@ Route::group(['prefix' => 'client'], function () {
   Route::get('/password/reset/{token}', [App\Http\Controllers\Client\Auth\ResetPasswordController::class, 'showResetForm']);
 
   Route::get('/home', [App\Http\Controllers\Client\ClientController::class, 'index'])->name('home')->middleware(['auth:client']);
+  Route::get('/biodata', [App\Http\Controllers\Client\ClientController::class, 'biodata'])->name('clientProfile')->middleware(['auth:client']);
+  Route::post('/updateProfile', [App\Http\Controllers\Client\ClientController::class, 'updateProfile'])->name('updateProfile')->middleware(['auth:client']);
 
 });
 
