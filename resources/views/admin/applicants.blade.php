@@ -66,69 +66,69 @@
                                     </div>
                                     <div class="modal-body row g-3">
                                         <div class="col-md-6">
-                                        <label>Title</label>
-                                        <input type="text" name="title" class="form-control">
+                                            <label>Title</label>
+                                            <input type="text" name="title" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Other Names *</label>
-                                        <input type="text" name="othernames" class="form-control" required>
+                                            <label>Other Names *</label>
+                                            <input type="text" name="othernames" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Last Name *</label>
-                                        <input type="text" name="last_name" class="form-control" required>
+                                            <label>Last Name *</label>
+                                            <input type="text" name="last_name" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Date of Birth *</label>
-                                        <input type="date" name="dob" class="form-control" required>
+                                            <label>Date of Birth *</label>
+                                            <input type="date" name="dob" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Email *</label>
-                                        <input type="email" name="email" class="form-control" required>
+                                            <label>Email *</label>
+                                            <input type="email" name="email" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Phone *</label>
-                                        <input type="text" name="phone" class="form-control" required>
+                                            <label>Phone *</label>
+                                            <input type="text" name="phone" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Address</label>
-                                        <input type="text" name="address" class="form-control">
+                                            <label>Address</label>
+                                            <input type="text" name="address" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>City</label>
-                                        <input type="text" name="city" class="form-control">
+                                            <label>City</label>
+                                            <input type="text" name="city" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>State</label>
-                                        <input type="text" name="state" class="form-control">
+                                            <label>State</label>
+                                            <input type="text" name="state" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Gender *</label>
-                                        <select name="gender" class="form-control" required>
-                                            <option value="">Select</option>
-                                            <option value="Male">Male</option>
-                                            <option value="Female">Female</option>
-                                            <option value="Other">Other</option>
-                                        </select>
+                                            <label>Gender *</label>
+                                            <select name="gender" class="form-control" required>
+                                                <option value="">Select</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                                <option value="Other">Other</option>
+                                            </select>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Password *</label>
-                                        <input type="password" name="password" class="form-control" required>
+                                            <label>Password *</label>
+                                            <input type="password" name="password" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Confirm Password *</label>
-                                        <input type="password" name="password_confirmation" class="form-control" required>
+                                            <label>Confirm Password *</label>
+                                            <input type="password" name="password_confirmation" class="form-control" required>
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Profile Image</label>
-                                        <input type="file" name="image" class="form-control">
+                                            <label>Profile Image</label>
+                                            <input type="file" name="image" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>CV (PDF/DOC)</label>
-                                        <input type="file" name="cv" class="form-control">
+                                            <label>CV (PDF/DOC)</label>
+                                            <input type="file" name="cv" class="form-control">
                                         </div>
                                         <div class="col-md-6">
-                                        <label>Cover Letter (PDF/DOC)</label>
-                                        <input type="file" name="cover_letter" class="form-control">
+                                            <label>Cover Letter (PDF/DOC)</label>
+                                            <input type="file" name="cover_letter" class="form-control">
                                         </div>
                                     </div>
                                     <div class="modal-footer">

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\SiteInfo as Setting;
 use App\Models\Applicant;
 use App\Models\JobPosting;
+use App\Models\Client;
 
 
 use SweetAlert;
@@ -95,13 +96,13 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    //APLICANT MANAGEMENT LOGIC
     public function applicants(){
         $applicants = Applicant::all();
         return view('admin.applicants', [
             'applicants' => $applicants,
         ]);
     }
-
 
 
     public function newApplicant(Request $request){
@@ -183,8 +184,6 @@ class AdminController extends Controller
 
         return redirect()->back();
     }
-
-
 
     public function updateApplicant(Request $request){
         $request->validate([
@@ -426,6 +425,178 @@ class AdminController extends Controller
 
         return redirect()->back();
     }
+
+
+    //CLIENT MANAGEMENT LOGIC
+    public function clients(){
+        $clients = Client::all();
+        return view('admin.clients', [
+            'clients' => $clients,
+        ]);
+    }
+
+    public function newClient(Request $request){
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255|unique:clients,email',
+            'password' => 'required|string|min:6|confirmed',
+            'phone' => 'required|string|max:15',
+            'company_name' => 'required|string|max:255',
+            'company_email' => 'nullable|email|max:255',
+            'company_phone' => 'nullable|string|max:20',
+            'company_address' => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:100',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+    
+        if ($validator->fails()) {
+            alert()->error('Error', $validator->messages()->first())->persistent('Close');
+            return redirect()->back()->withInput();
+        }
+    
+        $client = new Client();
+        $client->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'company_name' => $request->company_name,
+            'company_email' => $request->company_email,
+            'company_phone' => $request->company_phone,
+            'company_address' => $request->company_address,
+            'industry' => $request->industry,
+            'password' => bcrypt($request->password),
+        ]);
+    
+        if ($client->save()) {
+            $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->company_name)));
+            $hashedFolder = md5($client->id . uniqid());
+    
+            $client->slug = $slug;
+            $client->upload_folder = $hashedFolder;
+    
+            $folderPath = public_path("uploads/clients/{$hashedFolder}");
+            if (!file_exists($folderPath)) {
+                mkdir($folderPath, 0777, true);
+            }
+    
+            if ($request->hasFile('logo')) {
+                $logoName = 'logo.' . $request->file('logo')->getClientOriginalExtension();
+                $request->file('logo')->move($folderPath, $logoName);
+                $client->logo = "uploads/clients/{$hashedFolder}/{$logoName}";
+            }
+    
+            $client->save();
+    
+            alert()->success('Success', 'Client created successfully')->persistent('Close');
+        } else {
+            alert()->error('Oops!', 'Something went wrong while creating the client')->persistent('Close');
+        }
+    
+        return redirect()->back();
+    }
+    
+
+    public function viewClient($slug){
+        $client = Client::where('slug', $slug)->firstOrFail();
+
+        return view('admin.viewClient', [
+            'client' => $client,
+        ]);
+    }
+
+    public function deleteClient(Request $request){
+        $validator = Validator::make($request->all(), [
+            'client_id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Error', $validator->messages()->all()[0])->persistent('Close');
+            return redirect()->back();
+        }
+
+        if (!$client = Client::find($request->client_id)) {
+            alert()->error('Oops', 'Invalid Client')->persistent('Close');
+            return redirect()->back();
+        }
+
+        if ($client->delete()) {
+            alert()->success('Deleted', 'Client successfully deleted');
+            return redirect()->back();
+        }
+
+        alert()->error('Oops!', 'Something went wrong')->persistent('Close');
+        return redirect()->back();
+    }
+
+    public function updateClient(Request $request){
+        $validator = Validator::make($request->all(), [
+            'client_id' => 'required|exists:clients,id',
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15',
+            'company_name' => 'required|string|max:255',
+            'company_email' => 'nullable|email|max:255',
+            'company_phone' => 'nullable|string|max:20',
+            'company_address' => 'nullable|string|max:255',
+            'industry' => 'nullable|string|max:100',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Error', $validator->messages()->first())->persistent('Close');
+            return redirect()->back()->withInput();
+        }
+
+        $client = Client::findOrFail($request->client_id);
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->company_name)));
+
+        if (!$client->upload_folder) {
+            $hashedFolder = md5($client->id . uniqid());
+            $client->upload_folder = $hashedFolder;
+            $client->save();
+        } else {
+            $hashedFolder = $client->upload_folder;
+        }
+
+        $folderPath = public_path("uploads/clients/{$hashedFolder}");
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $logoUrl = $client->logo;
+        if ($request->hasFile('logo')) {
+            $logoName = 'logo.' . $request->file('logo')->getClientOriginalExtension();
+            $request->file('logo')->move($folderPath, $logoName);
+            $logoUrl = "uploads/clients/{$hashedFolder}/{$logoName}";
+        }
+
+        $client->fill([
+            'name' => $request->name,
+            'email' => $request->email,
+            'phone' => $request->phone,
+            'company_name' => $request->company_name,
+            'company_email' => $request->company_email,
+            'company_phone' => $request->company_phone,
+            'company_address' => $request->company_address,
+            'industry' => $request->industry,
+            'logo' => $logoUrl,
+            'slug' => $slug,
+        ]);
+
+        if ($client->isDirty()) {
+            if ($client->save()) {
+                alert()->success('Success', 'Client updated successfully')->persistent('Close');
+            } else {
+                alert()->error('Oops!', 'Something went wrong while saving the changes')->persistent('Close');
+            }
+        } else {
+            alert()->info('No Changes', 'No updates were made')->persistent('Close');
+        }
+
+        return redirect()->back();
+    }
+
 
 
 

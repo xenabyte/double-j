@@ -138,7 +138,7 @@
                             <li>
                                 <a href="{{ url('/client/biodata') }}" class="waves-effect">
                                     <i class="bx bx-home-circle"></i>
-                                    <span key="t-dashboard">Client Profile</span>
+                                    <span key="t-dashboard">Company Profile</span>
                                 </a>
                             </li>                      
 

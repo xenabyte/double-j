@@ -70,7 +70,7 @@ class ApplicantController extends Controller
         }
     
         // Generate slug
-        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $applicant->last_name . '-' . $applicant->othernames)));
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->last_name . '-' . $request->othernames)));
     
         // Determine folder: use existing or create once
         if (!$applicant->upload_folder) {

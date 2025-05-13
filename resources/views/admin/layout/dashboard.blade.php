@@ -150,6 +150,13 @@
                             </li> 
 
                             <li>
+                                <a href="{{ url('/admin/clients') }}" class="waves-effect">
+                                    <i class="bx bx-folder-open"></i>
+                                    <span key="t-settings">Clients</span>
+                                </a>
+                            </li> 
+
+                            <li>
                                 <a href="{{ url('/admin/jobPosting') }}" class="waves-effect">
                                     <i class="bx bx-folder-open"></i>
                                     <span key="t-settings">Vacancies</span>

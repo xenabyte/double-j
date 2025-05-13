@@ -41,6 +41,12 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/updateApplicant', [App\Http\Controllers\Admin\AdminController::class, 'updateApplicant'])->name('updateApplicant')->middleware(['auth:admin']);
   Route::post('/deleteApplicant', [App\Http\Controllers\Admin\AdminController::class, 'deleteApplicant'])->name('deleteApplicant')->middleware(['auth:admin']);
 
+  Route::get('/clients', [App\Http\Controllers\Admin\AdminController::class, 'clients'])->name('clients')->middleware(['auth:admin']);
+  Route::post('/newClient', [App\Http\Controllers\Admin\AdminController::class, 'newClient'])->name('newClient')->middleware(['auth:admin']);
+  Route::get('/viewClient/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'viewClient'])->name('viewClient')->middleware(['auth:admin']);
+  Route::post('/updateClient', [App\Http\Controllers\Admin\AdminController::class, 'updateClient'])->name('updateClient')->middleware(['auth:admin']);
+  Route::post('/deleteClient', [App\Http\Controllers\Admin\AdminController::class, 'deleteClient'])->name('deleteClient')->middleware(['auth:admin']);
+
   Route::get('/jobPosting', [App\Http\Controllers\Admin\AdminController::class, 'jobPosting'])->name('jobPosting')->middleware(['auth:admin']);
 
 
