@@ -22,7 +22,6 @@ class CreateJobPostingsTable extends Migration
             $table->enum('status', ['open', 'closed'])->default('open')->nullable();
             $table->string('upload_folder')->nullable();
             $table->string('slug')->nullable();
-            $table->string('client_id')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

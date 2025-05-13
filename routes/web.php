@@ -48,6 +48,11 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/deleteClient', [App\Http\Controllers\Admin\AdminController::class, 'deleteClient'])->name('deleteClient')->middleware(['auth:admin']);
 
   Route::get('/jobPosting', [App\Http\Controllers\Admin\AdminController::class, 'jobPosting'])->name('jobPosting')->middleware(['auth:admin']);
+  Route::post('/newJobPosting', [App\Http\Controllers\Admin\AdminController::class, 'newJobPosting'])->name('newJobPosting')->middleware(['auth:admin']);
+  Route::get('/viewJobPosting/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'viewJobPosting'])->name('viewJobPosting')->middleware(['auth:admin']);
+  Route::post('/updateJobPosting', [App\Http\Controllers\Admin\AdminController::class, 'updateJobPosting'])->name('updateJobPosting')->middleware(['auth:admin']);
+  Route::post('/deleteJobPosting', [App\Http\Controllers\Admin\AdminController::class, 'deleteJobPosting'])->name('deleteJobPosting')->middleware(['auth:admin']);
+  
 
 
 });

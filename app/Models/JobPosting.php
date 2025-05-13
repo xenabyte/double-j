@@ -17,8 +17,12 @@ class JobPosting extends Model
         'status',
         'image',
         'slug',
-        'upload_folder', 
-        'client_id',   
+        'upload_folder',    
     ];
+
+    public function applications(){
+        return $this->hasMany(Application::class);
+    }
+
 
 }

@@ -319,7 +319,6 @@ class AdminController extends Controller
             'description' => 'required|string',
             'requirements' => 'nullable|string',
             'status' => 'required|in:open,closed',
-            'client_id' => 'required|exists:clients,id', // Validate incoming client ID
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -338,7 +337,7 @@ class AdminController extends Controller
 
         $imagePath = null;
         if ($request->hasFile('image')) {
-            $imageName = '$slug.' . $request->file('image')->getClientOriginalExtension();
+            $imageName = $slug . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move($folderPath, $imageName);
             $imagePath = "uploads/job-postings/{$hashedFolder}/{$imageName}";
         }
@@ -351,7 +350,6 @@ class AdminController extends Controller
             'image' => $imagePath,
             'slug' => $slug,
             'upload_folder' => $hashedFolder,
-            'client_id' => $request->client_id,
         ]);
 
         if ($job->save()) {
@@ -370,7 +368,6 @@ class AdminController extends Controller
             'description' => 'required|string',
             'requirements' => 'nullable|string',
             'status' => 'required|in:open,closed',
-            'client_id' => 'required|exists:clients,id', // Now editable and validated
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
 
@@ -386,7 +383,6 @@ class AdminController extends Controller
         if (!$job->upload_folder) {
             $hashedFolder = md5($job->id . uniqid());
             $job->upload_folder = $hashedFolder;
-            $job->save();
         } else {
             $hashedFolder = $job->upload_folder;
         }
@@ -398,7 +394,7 @@ class AdminController extends Controller
 
         $imagePath = $job->image;
         if ($request->hasFile('image')) {
-            $imageName = '$slug.' . $request->file('image')->getClientOriginalExtension();
+            $imageName = $slug . '.' . $request->file('image')->getClientOriginalExtension();
             $request->file('image')->move($folderPath, $imageName);
             $imagePath = "uploads/job-postings/{$hashedFolder}/{$imageName}";
         }
@@ -410,14 +406,13 @@ class AdminController extends Controller
             'status' => $request->status,
             'image' => $imagePath,
             'slug' => $slug,
-            'client_id' => $request->client_id,
         ]);
 
         if ($job->isDirty()) {
             if ($job->save()) {
                 alert()->success('Success', 'Job posting updated successfully')->persistent('Close');
             } else {
-                alert()->error('Oops!', 'Something went wrong while saving the changes')->persistent('Close');
+                alert()->error('Oops!', 'Something went wrong while saving changes')->persistent('Close');
             }
         } else {
             alert()->info('No Changes', 'No updates were made')->persistent('Close');
@@ -425,6 +420,31 @@ class AdminController extends Controller
 
         return redirect()->back();
     }
+
+    public function deleteJobPosting(Request $request){
+        $request->validate([
+            'job_id' => 'required|exists:job_postings,id',
+        ]);
+
+        $job = JobPosting::findOrFail($request->job_id);
+
+        if ($job->delete()) {
+            alert()->success('Deleted', 'Job posting deleted successfully')->persistent('Close');
+        } else {
+            alert()->error('Error', 'Failed to delete job posting')->persistent('Close');
+        }
+
+        return redirect()->back();
+    }
+
+    public function viewJobPosting($slug){
+        $jobPosting = JobPosting::where('slug', $slug)->firstOrFail();
+
+        return view('admin.viewJobPosting', [
+            'jobPosting' => $jobPosting,
+        ]);
+    }
+
 
 
     //CLIENT MANAGEMENT LOGIC

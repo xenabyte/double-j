@@ -30,7 +30,6 @@
                         <tr>
                             <th>Title</th>
                             <th>Status</th>
-                            <th>Company</th>
                             <th>Created At</th>
                             <th>Actions</th>
                         </tr>
@@ -44,7 +43,6 @@
                                         {{ ucfirst($job->status) }}
                                     </span>
                                 </td>
-                                <td>{{ $job->company_name }}</td>
                                 <td>{{ $job->created_at->format('M d, Y') }}</td>
                                 <td>
                                     <a href="{{ url('admin/viewJobPosting/'.$job->slug) }}" class="btn btn-primary m-1">
@@ -77,7 +75,7 @@
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label>Description *</label>
-                                                    <textarea name="description" class="form-control" rows="4" required>{{ $job->description }}</textarea>
+                                                    <textarea name="description" class="form-control" rows="4" >{{ $job->description }}</textarea>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <label>Requirements</label>
@@ -163,11 +161,11 @@
                     </div>
                     <div class="col-md-12">
                         <label>Description *</label>
-                        <textarea name="description" class="form-control" rows="4" required></textarea>
+                        <textarea name="description" rows="4" ></textarea>
                     </div>
                     <div class="col-md-12">
                         <label>Requirements</label>
-                        <textarea name="requirements" class="form-control" rows="4"></textarea>
+                        <textarea name="requirements" rows="4"></textarea>
                     </div>
                     
                 </div>

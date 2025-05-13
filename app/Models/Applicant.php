@@ -70,4 +70,9 @@ class Applicant extends Authenticatable
         $this->cover_letter &&
         $this->image;
     }
+
+    public function applications(){
+        return $this->hasMany(Application::class);
+    }
+
 }
