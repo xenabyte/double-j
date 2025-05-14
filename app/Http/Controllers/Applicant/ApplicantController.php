@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use App\Models\Applicant;
+use App\Models\JobPosting;
+use App\Models\Application;
 
 use SweetAlert;
 use Alert;
@@ -132,6 +134,59 @@ class ApplicantController extends Controller
     
         alert()->error('Oops!', 'Something went wrong while updating biodata')->persistent('Close');
         return redirect()->back();
+    }
+
+    public function jobPostings(){
+        $applicant = Auth::guard('applicant')->user();
+        $jobPostings = JobPosting::where('status', 'open')->get();
+
+        return view('applicant.jobPostings', [
+            'applicant' => $applicant,
+            'jobPostings' => $jobPostings
+        ]);
+    }
+    public function viewJobPosting($slug){
+        $applicant = Auth::guard('applicant')->user();
+        $jobPosting = JobPosting::where('slug', $slug)->first();
+
+        if (!$jobPosting) {
+            alert()->error('Error', 'Job posting not found')->persistent('Close');
+            return redirect()->back();
+        }
+
+        return view('applicant.viewJobPosting', [
+            'applicant' => $applicant,
+            'jobPosting' => $jobPosting
+        ]);
+    }
+
+    public function apply(JobPosting $jobPosting){
+        $applicant = auth()->user();
+
+        $alreadyApplied = Application::where('applicant_id', $applicant->id)
+            ->where('job_posting_id', $jobPosting->id)
+            ->exists();
+
+        if ($alreadyApplied) {
+            return back()->with('error', 'You have already applied for this job.');
+        }
+
+        Application::create([
+            'applicant_id' => $applicant->id,
+            'job_posting_id' => $jobPosting->id,
+        ]);
+
+        return back()->with('success', 'You have successfully applied for this job.');
+    }
+
+    public function applications(){
+        $applicant = Auth::guard('applicant')->user();
+        $applications = Application::where('applicant_id', $applicant->id)->with('jobPosting')->get();
+
+        return view('applicant.applications', [
+            'applicant' => $applicant,
+            'applications' => $applications
+        ]);
     }
     
 }

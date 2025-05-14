@@ -32,6 +32,7 @@
                             <th>Status</th>
                             <th>Created At</th>
                             <th>Actions</th>
+                            <th>Set Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -39,7 +40,7 @@
                             <tr>
                                 <td>{{ $job->title }}</td>
                                 <td>
-                                    <span class="badge bg-{{ $job->status === 'open' ? 'success' : 'secondary' }}">
+                                    <span class="btn btn-{{ $job->status === 'open' ? 'success' : 'danger' }} btn-sm m-1 disabled">
                                         {{ ucfirst($job->status) }}
                                     </span>
                                 </td>
@@ -53,7 +54,26 @@
                                     </button>
                                     <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deleteJobPosting{{ $job->id }}">
                                         <i class="mdi mdi-delete"></i>
-                                    </button>
+                                    </button>                                    
+                                </td>
+                                <td>
+                                    <form action="{{ url('admin/setJobStatus') }}" method="POST" class="d-flex flex-wrap gap-1">
+                                        @csrf
+                                        <input type="hidden" name="job_id" value="{{ $job->id }}">
+                                        @foreach(['open', 'closed'] as $status)
+                                            <button 
+                                                type="submit" 
+                                                name="status" 
+                                                value="{{ $status }}" 
+                                                class="btn btn-sm 
+                                                    {{ $job->status === $status 
+                                                        ? ($status === 'open' ? 'btn-success' : 'btn-danger') 
+                                                        : 'btn-outline-secondary' 
+                                                    }}">
+                                                {{ ucfirst($status) }}
+                                            </button>
+                                        @endforeach
+                                    </form>                                    
                                 </td>
                             </tr>
 
@@ -73,14 +93,6 @@
                                                     <label>Title *</label>
                                                     <input type="text" name="title" class="form-control" value="{{ $job->title }}" required>
                                                 </div>
-                                                <div class="col-md-12">
-                                                    <label>Description *</label>
-                                                    <textarea name="description" class="form-control" rows="4" >{{ $job->description }}</textarea>
-                                                </div>
-                                                <div class="col-md-12">
-                                                    <label>Requirements</label>
-                                                    <textarea name="requirements" class="form-control" rows="4">{{ $job->requirements }}</textarea>
-                                                </div>
                                                 <div class="col-md-6">
                                                     <label>Status *</label>
                                                     <select name="status" class="form-control" required>
@@ -88,12 +100,20 @@
                                                         <option value="closed" {{ $job->status === 'closed' ? 'selected' : '' }}>Closed</option>
                                                     </select>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-12">
                                                     <label>Image</label>
                                                     <input type="file" name="image" class="form-control" accept="image/*">
                                                     @if($job->image)
                                                         <small>Current: <a href="{{ asset($job->image) }}" target="_blank">View Image</a></small>
                                                     @endif
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>Description *</label>
+                                                    <textarea name="description" class="form-control" rows="4" >{{ $job->description }}</textarea>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <label>Requirements</label>
+                                                    <textarea name="requirements" class="form-control" rows="4">{{ $job->requirements }}</textarea>
                                                 </div>
                                             </div>
                                             <div class="modal-footer">

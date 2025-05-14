@@ -52,7 +52,11 @@ Route::group(['prefix' => 'admin'], function () {
   Route::get('/viewJobPosting/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'viewJobPosting'])->name('viewJobPosting')->middleware(['auth:admin']);
   Route::post('/updateJobPosting', [App\Http\Controllers\Admin\AdminController::class, 'updateJobPosting'])->name('updateJobPosting')->middleware(['auth:admin']);
   Route::post('/deleteJobPosting', [App\Http\Controllers\Admin\AdminController::class, 'deleteJobPosting'])->name('deleteJobPosting')->middleware(['auth:admin']);
-  
+  Route::post('/setJobStatus', [App\Http\Controllers\Admin\AdminController::class, 'setJobStatus'])->name('setJobStatus')->middleware(['auth:admin']);
+
+  Route::get('/applications', [App\Http\Controllers\Admin\AdminController::class, 'applications'])->name('applications')->middleware(['auth:admin']);
+  Route::post('/setApplicationStatus', [App\Http\Controllers\Admin\AdminController::class, 'setApplicationStatus'])->name('setApplicationStatus')->middleware(['auth:admin']);
+
 
 
 });
@@ -113,5 +117,12 @@ Route::group(['prefix' => 'applicant'], function () {
 
   Route::get('/biodata', [App\Http\Controllers\Applicant\ApplicantController::class, 'biodata'])->name('biodata')->middleware(['auth:applicant']);
   Route::post('/updateBiodata', [App\Http\Controllers\Applicant\ApplicantController::class, 'updateBiodata'])->name('updateBiodata')->middleware(['auth:applicant']);
+
+  Route::get('/jobPostings', [App\Http\Controllers\Applicant\ApplicantController::class, 'jobPostings'])->name('jobPostings')->middleware(['auth:applicant']);
+  Route::get('/viewJobPosting/{slug}', [App\Http\Controllers\Applicant\ApplicantController::class, 'viewJobPosting'])->name('viewJobPosting')->middleware(['auth:applicant']);
+  Route::post('/apply/{jobPosting:slug}', [App\Http\Controllers\Applicant\ApplicantController::class, 'apply'])->middleware(['auth:applicant']);
+
+  Route::get('/applications', [App\Http\Controllers\Applicant\ApplicantController::class, 'applications'])->name('applications')->middleware(['auth:applicant']);
+
 
 });

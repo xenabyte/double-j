@@ -15,6 +15,7 @@ use App\Models\SiteInfo as Setting;
 use App\Models\Applicant;
 use App\Models\JobPosting;
 use App\Models\Client;
+use App\Models\Application;
 
 
 use SweetAlert;
@@ -37,6 +38,7 @@ class AdminController extends Controller
         return view('admin.home');
     }
 
+    //GLOBAL SITE SETTINGS LOGIC
     public function siteSettings(){
         $setting = Setting::first();
         return view('admin.siteSettings', [
@@ -103,7 +105,6 @@ class AdminController extends Controller
             'applicants' => $applicants,
         ]);
     }
-
 
     public function newApplicant(Request $request){
         $validator = Validator::make($request->all(), [
@@ -305,7 +306,8 @@ class AdminController extends Controller
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
     }
-
+    
+    //JOB POSTING MANAGEMENT LOGIC
     public function jobPosting(){
         $jobPostings = JobPosting::all();
         return view('admin.jobPostings', [
@@ -445,6 +447,18 @@ class AdminController extends Controller
         ]);
     }
 
+    public function setJobStatus(Request $request){
+        $request->validate([
+            'job_id' => 'required|exists:job_postings,id',
+            'status' => 'required|in:open,closed',
+        ]);
+
+        $job = JobPosting::findOrFail($request->job_id);
+        $job->status = $request->status;
+        $job->save();
+
+        return back()->with('success', 'Job status updated to ' . $request->status);
+    }
 
 
     //CLIENT MANAGEMENT LOGIC
@@ -617,6 +631,26 @@ class AdminController extends Controller
         return redirect()->back();
     }
 
+    public function applications(){
+        $applications = Application::all();
+        return view('admin.applications', [
+            'applications' => $applications,
+        ]);
+    }
+
+    public function setApplicationStatus(Request $request)
+{
+    $request->validate([
+        'application_id' => 'required|exists:applications,id',
+        'status' => 'required|in:pending,reviewed,accepted,rejected'
+    ]);
+
+    $application = Application::findOrFail($request->application_id);
+    $application->status = $request->status;
+    $application->save();
+
+    return back()->with('success', 'Application status updated successfully!');
+}
 
 
 

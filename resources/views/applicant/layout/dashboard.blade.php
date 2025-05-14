@@ -140,7 +140,21 @@
                                     <i class="bx bx-cog"></i>
                                     <span key="t-settings">Biodata</span>
                                 </a>
-                            </li>                      
+                            </li>   
+                            
+                            <li>
+                                <a href="{{ url('/applicant/jobPostings') }}" class="waves-effect">
+                                    <i class="bx bx-cog"></i>
+                                    <span key="t-settings">Vacancies</span>
+                                </a>
+                            </li> 
+                            
+                            <li>
+                                <a href="{{ url('/applicant/applications') }}" class="waves-effect">
+                                    <i class="bx bx-cog"></i>
+                                    <span key="t-settings">Applications</span>
+                                </a>
+                            </li> 
 
                            
 
