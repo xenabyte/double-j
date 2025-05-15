@@ -56,8 +56,12 @@ Route::group(['prefix' => 'admin'], function () {
 
   Route::get('/applications', [App\Http\Controllers\Admin\AdminController::class, 'applications'])->name('applications')->middleware(['auth:admin']);
   Route::post('/setApplicationStatus', [App\Http\Controllers\Admin\AdminController::class, 'setApplicationStatus'])->name('setApplicationStatus')->middleware(['auth:admin']);
+  Route::post('/graduateApplicant', [App\Http\Controllers\Admin\AdminController::class, 'graduateApplicant'])->name('graduateApplicant')->middleware(['auth:admin']);
 
-
+  Route::get('/assignClient', [App\Http\Controllers\Admin\AdminController::class, 'assignClient'])->name('assignClient')->middleware(['auth:admin']);
+  Route::post('/assignClientToJob', [App\Http\Controllers\Admin\AdminController::class, 'assignClientToJob'])->name('assignClientToJob')->middleware(['auth:admin']);
+  Route::post('/engageEmployee', [App\Http\Controllers\Admin\AdminController::class, 'engageEmployee'])->name('engageEmployee')->middleware(['auth:admin']);
+  Route::post('/disengageEmployee', [App\Http\Controllers\Admin\AdminController::class, 'disengageEmployee'])->name('disengageEmployee')->middleware(['auth:admin']);
 
 });
 

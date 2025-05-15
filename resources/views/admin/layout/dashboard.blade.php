@@ -140,7 +140,11 @@
                                     <i class="bx bx-cog"></i>
                                     <span key="t-settings">Site Settings</span>
                                 </a>
-                            </li>                      
+                            </li>    
+                            
+                            <br>
+                            
+                            <li class="menu-title" key="t-menu">Staff Management</li>
 
                             <li>
                                 <a href="{{ url('/admin/applicants') }}" class="waves-effect">
@@ -150,11 +154,24 @@
                             </li> 
 
                             <li>
-                                <a href="{{ url('/admin/clients') }}" class="waves-effect">
-                                    <i class="bx bx-folder-open"></i>
-                                    <span key="t-settings">Clients</span>
+                                <a href="{{ url('/admin/employees') }}" class="waves-effect">
+                                    <i class="bx bx-briefcase-alt"></i>
+                                    <span key="t-settings">Employees</span>
                                 </a>
                             </li> 
+                            <br>
+
+                            <li class="menu-title" key="t-menu">Client Management</li>
+
+                            <li>
+                                <a href="{{ url('/admin/clients') }}" class="waves-effect">
+                                    <i class="bx bxs-user-detail"></i>
+                                    <span key="t-clients">Clients</span>
+                                </a>
+                            </li> 
+                            <br>
+
+                            <li class="menu-title" key="t-menu">Job Management</li>
 
                             <li>
                                 <a href="{{ url('/admin/jobPosting') }}" class="waves-effect">
@@ -165,8 +182,15 @@
 
                             <li>
                                 <a href="{{ url('/admin/applications') }}" class="waves-effect">
-                                    <i class="bx bx-folder-open"></i>
+                                    <i class="bx bxs-collection"></i>
                                     <span key="t-settings">Applications</span>
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="{{ url('/admin/assignClient') }}" class="waves-effect">
+                                    <i class="bx bxs-select-multiple"></i>
+                                    <span key="t-settings">Client Assign</span>
                                 </a>
                             </li>
                            

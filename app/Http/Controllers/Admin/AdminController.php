@@ -10,12 +10,15 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Password;
+
 
 use App\Models\SiteInfo as Setting;
 use App\Models\Applicant;
 use App\Models\JobPosting;
 use App\Models\Client;
 use App\Models\Application;
+use App\Models\Employee;
 
 
 use SweetAlert;
@@ -637,21 +640,93 @@ class AdminController extends Controller
             'applications' => $applications,
         ]);
     }
+    
 
-    public function setApplicationStatus(Request $request)
-{
-    $request->validate([
-        'application_id' => 'required|exists:applications,id',
-        'status' => 'required|in:pending,reviewed,accepted,rejected'
-    ]);
+    public function setApplicationStatus(Request $request){
+        $validator = Validator::make($request->all(), [
+            'application_id' => 'required|exists:applications,id',
+            'status' => 'required|in:pending,reviewed,accepted,rejected',
+        ]);
 
-    $application = Application::findOrFail($request->application_id);
-    $application->status = $request->status;
-    $application->save();
+        $application = Application::with('applicant', 'jobPosting')->findOrFail($request->application_id);
 
-    return back()->with('success', 'Application status updated successfully!');
-}
+        // Update status
+        $application->status = $request->status;
+        $application->save();
+
+        // Graduate applicant to employee only if status is "accepted"
+        if ($request->status === 'accepted') {
+            $applicant = $application->applicant;
+            $job = $application->jobPosting;
+
+            // Avoid duplicate employee records
+            $existingEmployee = Employee::where('email', $applicant->email)->first();
+            if (!$existingEmployee) {
+                $employee = Employee::create([
+                    'title' => $applicant->title,
+                    'othernames' => $applicant->othernames,
+                    'last_name' => $applicant->last_name,
+                    'email' => $applicant->email,
+                    'dob' => $applicant->dob,
+                    'phone' => $applicant->phone,
+                    'address' => $applicant->address,
+                    'city' => $applicant->city,
+                    'state' => $applicant->state,
+                    'gender' => $applicant->gender,
+                    'image' => $applicant->image,
+                    'cv' => $applicant->cv,
+                    'cover_letter' => $applicant->cover_letter,
+                    'upload_folder' => $applicant->upload_folder,
+                    'job_posting_id' => $job->id,
+                    // 'client_id' will be set later via a separate interface
+                ]);
+
+                // Send password reset notification
+                $token = Password::broker('employees')->createToken($employee);
+                $employee->sendPasswordResetNotification($token);
+            }
+        }
+
+        alert()->success('Application status updated successfully.')->persistent('Close');
+        return redirect()->back();
+    }
 
 
+    public function assignClient(){
+        $employees = Employee::withTrashed()->with('jobPosting', 'client')->get();
+        $clients = Client::all();
+        $jobPostings = JobPosting::all();
+
+        return view('admin.assignClient', compact('employees', 'clients', 'jobPostings'));
+    }
+
+    public function assignClientToJob(Request $request){
+        $validator = Validator::make($request->all(), [
+            'employee_id' => 'required|exists:employees,id',
+            'client_id' => 'required|exists:clients,id',
+            'job_id' => 'required|exists:job_postings,id',
+        ]);
+
+        $employee = Employee::withTrashed()->findOrFail($request->employee_id);
+        $employee->client_id = $request->client_id;
+        $employee->job_posting_id = $request->job_id;
+        $employee->save();
+
+        return back()->with('success', 'Employee assigned to client successfully.');
+    }
+
+    public function engageEmployee(Request $request){
+        $employee = Employee::withTrashed()->findOrFail($request->employee_id);
+        $employee->restore();
+
+        return back()->with('success', 'Employee re-engaged successfully.');
+    }
+
+    public function disengageEmployee(Request $request){
+        $employee = Employee::findOrFail($request->employee_id);
+        $employee->delete();
+
+        return back()->with('success', 'Employee disengaged successfully.');
+    }
 
 }

@@ -27,7 +27,7 @@
                     <thead>
                         <tr>
                             <th>Job Title</th>
-                            <th>Submitted At</th>
+                            <th>Application Date</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -48,14 +48,59 @@
                                     </span>
                                 </td>
                                 <td>
-                                    <a href="#" class="btn btn-primary m-1">
+                                    <button type="button" class="btn btn-primary m-1" data-bs-toggle="modal" data-bs-target="#viewAppModal{{ $app->id }}">
                                         <i class="mdi mdi-eye"></i>
-                                    </a>
+                                    </button>
                                 </td>
+
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
+
+                @foreach($applications as $app)
+                    <div class="modal fade" id="viewAppModal{{ $app->id }}" tabindex="-1" aria-labelledby="viewAppModalLabel{{ $app->id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title d-flex align-items-center gap-2" id="viewAppModalLabel{{ $app->id }}">
+                                        <span>{{ $app->jobPosting->title ?? 'N/A' }}</span>
+                                        <span class="badge 
+                                            {{ 
+                                                $app->status === 'pending' ? 'bg-warning' : 
+                                                ($app->status === 'reviewed' ? 'bg-info' :
+                                                ($app->status === 'accepted' ? 'bg-success' : 'bg-danger')) 
+                                            }}">
+                                            {{ ucfirst($app->status) }}
+                                        </span>
+                                    </h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+
+                                <div class="modal-body">
+                                    <p><strong>Job Title:</strong> <br> {!! $app->jobPosting->title ?? 'N/A' !!}</p>
+                                    <p><strong>Description:</strong><br>{!! $app->jobPosting->description ?? 'N/A' !!}</p>
+                                    <p><strong>Requirements:</strong><br>{!! $app->jobPosting->requirements ?? 'N/A' !!}</p>
+                                    {{-- <p><strong>Application Status:</strong> 
+                                        <span class="badge 
+                                            {{ 
+                                                $app->status === 'pending' ? 'bg-warning' : 
+                                                ($app->status === 'reviewed' ? 'bg-info' :
+                                                ($app->status === 'accepted' ? 'bg-success' : 'bg-danger')) 
+                                            }}">
+                                            {{ ucfirst($app->status) }}
+                                        </span>
+                                    </p> --}}
+                                    <p><strong>Applied On:</strong> {{ $app->created_at->format('F j, Y') }}</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endforeach
+
             </div>
         </div>
     </div>
