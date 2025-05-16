@@ -134,13 +134,18 @@
                                     <span key="t-dashboard">Home</span>
                                 </a>
                             </li>
-                            <li class="menu-title" key="t-menu">Website Configurations</li>
+
+                            <br>
+                            <li class="menu-title" key="t-menu">Biodata Upload</li>
                             <li>
                                 <a href="{{ url('/applicant/biodata') }}" class="waves-effect">
                                     <i class="bx bx-cog"></i>
                                     <span key="t-settings">Biodata</span>
                                 </a>
-                            </li>   
+                            </li>  
+                            <br>
+                            
+                            <li class="menu-title" key="t-menu">Job Openings</li>
                             
                             <li>
                                 <a href="{{ url('/applicant/jobPostings') }}" class="waves-effect">
@@ -148,10 +153,13 @@
                                     <span key="t-settings">Vacancies</span>
                                 </a>
                             </li> 
+                            <br>
+
+                            <li class="menu-title" key="t-menu">Application Management</li>
                             
                             <li>
                                 <a href="{{ url('/applicant/applications') }}" class="waves-effect">
-                                    <i class="bx bx-cog"></i>
+                                    <i class="bx bxs-collection"></i>
                                     <span key="t-settings">Applications</span>
                                 </a>
                             </li> 

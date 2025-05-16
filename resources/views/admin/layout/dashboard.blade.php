@@ -134,6 +134,8 @@
                                     <span key="t-dashboard">Home</span>
                                 </a>
                             </li>
+                            <br>
+                            
                             <li class="menu-title" key="t-menu">Website Configurations</li>
                             <li>
                                 <a href="{{ url('/admin/siteSettings') }}" class="waves-effect">

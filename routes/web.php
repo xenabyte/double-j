@@ -41,6 +41,9 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/updateApplicant', [App\Http\Controllers\Admin\AdminController::class, 'updateApplicant'])->name('updateApplicant')->middleware(['auth:admin']);
   Route::post('/deleteApplicant', [App\Http\Controllers\Admin\AdminController::class, 'deleteApplicant'])->name('deleteApplicant')->middleware(['auth:admin']);
 
+  Route::get('/employees', [App\Http\Controllers\Admin\AdminController::class, 'employees'])->name('employees')->middleware(['auth:admin']);
+
+
   Route::get('/clients', [App\Http\Controllers\Admin\AdminController::class, 'clients'])->name('clients')->middleware(['auth:admin']);
   Route::post('/newClient', [App\Http\Controllers\Admin\AdminController::class, 'newClient'])->name('newClient')->middleware(['auth:admin']);
   Route::get('/viewClient/{slug}', [App\Http\Controllers\Admin\AdminController::class, 'viewClient'])->name('viewClient')->middleware(['auth:admin']);
@@ -100,6 +103,8 @@ Route::group(['prefix' => 'client'], function () {
   Route::get('/home', [App\Http\Controllers\Client\ClientController::class, 'index'])->name('home')->middleware(['auth:client']);
   Route::get('/biodata', [App\Http\Controllers\Client\ClientController::class, 'biodata'])->name('clientProfile')->middleware(['auth:client']);
   Route::post('/updateProfile', [App\Http\Controllers\Client\ClientController::class, 'updateProfile'])->name('updateProfile')->middleware(['auth:client']);
+
+  Route::get('/employees', [App\Http\Controllers\Client\ClientController::class, 'employees'])->name('employees')->middleware(['auth:client']);
 
 });
 

@@ -309,6 +309,13 @@ class AdminController extends Controller
         alert()->error('Oops!', 'Something went wrong')->persistent('Close');
         return redirect()->back();
     }
+
+    public function employees(){
+        $employees = Employee::withTrashed()->with('jobPosting', 'client')->get();
+        return view('admin.employees', [
+            'employees' => $employees,
+        ]);
+    }
     
     //JOB POSTING MANAGEMENT LOGIC
     public function jobPosting(){
@@ -697,7 +704,11 @@ class AdminController extends Controller
         $clients = Client::all();
         $jobPostings = JobPosting::all();
 
-        return view('admin.assignClient', compact('employees', 'clients', 'jobPostings'));
+        return view('admin.assignClient', [
+            'employees' => $employees,
+            'clients' => $clients,
+            'jobPostings' => $jobPostings,
+        ]);
     }
 
     public function assignClientToJob(Request $request){

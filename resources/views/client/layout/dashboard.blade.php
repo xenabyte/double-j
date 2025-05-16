@@ -100,7 +100,7 @@
                         <div class="dropdown d-inline-block">
                             <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <img class="rounded-circle header-profile-user" src="{{ asset('assets/images/users/avatar-1.jpg') }}"
+                                <img class="rounded-circle header-profile-user" src="{{ $client->logo ? asset($client->logo) : asset('assets/images/users/avatar-1.jpg') }}"
                                     alt="Header Avatar">
                                 <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $client->name }}</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
@@ -133,14 +133,27 @@
                                     <i class="bx bx-home-circle"></i>
                                     <span key="t-dashboard">Home</span>
                                 </a>
-                            </li>      
+                            </li>   
+                            <br>
+                            
+                            <li class="menu-title" key="t-menu">Company Configuration</li>
                             
                             <li>
                                 <a href="{{ url('/client/biodata') }}" class="waves-effect">
-                                    <i class="bx bx-home-circle"></i>
+                                    <i class="bx bxs-widget"></i>
                                     <span key="t-dashboard">Company Profile</span>
                                 </a>
-                            </li>                      
+                            </li>   
+                            <br>
+
+
+                            <li class="menu-title" key="t-menu">Employee Management</li>
+                            <li>
+                                <a href="{{ url('/client/employees') }}" class="waves-effect">
+                                    <i class="bx bx-briefcase-alt"></i>
+                                    <span key="t-dashboard">Employees</span>
+                                </a>
+                            </li> 
 
 
                            

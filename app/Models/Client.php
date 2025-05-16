@@ -61,4 +61,7 @@ class Client extends Authenticatable
         $this->industry &&
         $this->company_phone;
     }
+    public function employees(){
+        return $this->hasMany(Employee::class);
+    }
 }

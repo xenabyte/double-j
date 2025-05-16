@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 use App\Models\Client;
+use App\Models\Employee;
+use App\Models\JobPosting;
 
 use SweetAlert;
 use Alert;
@@ -111,6 +113,15 @@ class ClientController extends Controller
 
         alert()->error('Oops!', 'Something went wrong while updating client profile')->persistent('Close');
         return redirect()->back();
+    }
+
+    public function employees(){
+        $client = Auth::guard('client')->user(); 
+        $employees = $client->employees()->whereNull('deleted_at')->with('jobPosting')->get();
+
+        return view('client.employees', [
+            'employees' => $employees
+        ]);
     }
 
 }
