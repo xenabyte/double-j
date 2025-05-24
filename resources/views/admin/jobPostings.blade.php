@@ -31,8 +31,8 @@
                             <th>Title</th>
                             <th>Status</th>
                             <th>Created At</th>
-                            <th>Actions</th>
                             <th>Set Status</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -45,17 +45,6 @@
                                     </span>
                                 </td>
                                 <td>{{ $job->created_at->format('M d, Y') }}</td>
-                                <td>
-                                    <a href="{{ url('admin/viewJobPosting/'.$job->slug) }}" class="btn btn-primary m-1">
-                                        <i class="mdi mdi-eye"></i>
-                                    </a>
-                                    <button type="button" class="btn btn-info m-1" data-bs-toggle="modal" data-bs-target="#editJobPosting{{ $job->id }}">
-                                        <i class="mdi mdi-pencil"></i>
-                                    </button>
-                                    <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deleteJobPosting{{ $job->id }}">
-                                        <i class="mdi mdi-delete"></i>
-                                    </button>                                    
-                                </td>
                                 <td>
                                     <form action="{{ url('admin/setJobStatus') }}" method="POST" class="d-flex flex-wrap gap-1">
                                         @csrf
@@ -74,6 +63,17 @@
                                             </button>
                                         @endforeach
                                     </form>                                    
+                                </td>
+                                <td>
+                                    <a href="{{ url('admin/viewJobPosting/'.$job->slug) }}" class="btn btn-primary m-1">
+                                        <i class="mdi mdi-eye"></i>
+                                    </a>
+                                    <button type="button" class="btn btn-info m-1" data-bs-toggle="modal" data-bs-target="#editJobPosting{{ $job->id }}">
+                                        <i class="mdi mdi-pencil"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-danger m-1" data-bs-toggle="modal" data-bs-target="#deleteJobPosting{{ $job->id }}">
+                                        <i class="mdi mdi-delete"></i>
+                                    </button>                                    
                                 </td>
                             </tr>
 

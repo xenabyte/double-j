@@ -15,6 +15,7 @@ use Illuminate\Support\Str;
 use App\Models\Client;
 use App\Models\Employee;
 use App\Models\JobPosting;
+use App\Models\JobRequest;
 
 use SweetAlert;
 use Alert;
@@ -123,5 +124,151 @@ class ClientController extends Controller
             'employees' => $employees
         ]);
     }
+
+    public function jobRequest(){
+        $jobRequests = JobRequest::all();
+        $clients = Auth::guard('client')->user();
+        return view('client.jobRequest', [
+            'jobRequests' => $jobRequests,
+            'clients' => $clients
+        ]);
+    }
+
+
+    public function newJobRequest(Request $request){
+        $validator = Validator::make($request->all(), [
+            'client_id' => 'required|exists:clients,id',
+            'job_title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'required|string',
+            'vacancies' => 'required|integer|min:1',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Validation Error', $validator->messages()->first())->persistent('Close');
+            return redirect()->back()->withInput();
+        }
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->job_title))) . '-' . uniqid();
+        $hashedFolder = md5($slug . time());
+        $folderPath = public_path("uploads/job-requests/{$hashedFolder}");
+
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imageName = $slug . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move($folderPath, $imageName);
+            $imagePath = "uploads/job-requests/{$hashedFolder}/{$imageName}";
+        }
+
+        $job = new JobRequest([
+            'client_id' => $request->client_id,
+            'job_title' => $request->job_title,
+            'description' => $request->description,
+            'requirements' => $request->requirements,
+            'vacancies' => $request->vacancies,
+            'status' => 'pending',
+            'image' => $imagePath,
+            'slug' => $slug,
+            'upload_folder' => $hashedFolder,
+        ]);
+
+        if ($job->save()) {
+            alert()->success('Success', 'Job request submitted successfully')->persistent('Close');
+        } else {
+            alert()->error('Error', 'Failed to submit job request')->persistent('Close');
+        }
+
+        return redirect()->back();
+    }
+
+    public function updateJobRequest(Request $request){
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|exists:job_requests,id',
+            'job_title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'requirements' => 'required|string',
+            'vacancies' => 'required|integer|min:1',
+            'status' => 'required|in:pending,approved,rejected',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Validation Error', $validator->messages()->first())->persistent('Close');
+            return redirect()->back()->withInput();
+        }
+
+        $job = JobRequest::findOrFail($request->job_id);
+
+        $slug = strtolower(trim(preg_replace('/[^A-Za-z0-9-]+/', '-', $request->job_title))) . '-' . uniqid();
+
+        if (!$job->upload_folder) {
+            $hashedFolder = md5($job->id . uniqid());
+            $job->upload_folder = $hashedFolder;
+        } else {
+            $hashedFolder = $job->upload_folder;
+        }
+
+        $folderPath = public_path("uploads/job-requests/{$hashedFolder}");
+        if (!file_exists($folderPath)) {
+            mkdir($folderPath, 0777, true);
+        }
+
+        $imagePath = $job->image;
+        if ($request->hasFile('image')) {
+            $imageName = $slug . '.' . $request->file('image')->getClientOriginalExtension();
+            $request->file('image')->move($folderPath, $imageName);
+            $imagePath = "uploads/job-requests/{$hashedFolder}/{$imageName}";
+        }
+
+        $job->fill([
+            'job_title' => $request->job_title,
+            'description' => $request->description,
+            'requirements' => $request->requirements,
+            'vacancies' => $request->vacancies,
+            'status' => $request->status,
+            'image' => $imagePath,
+            'slug' => $slug,
+        ]);
+
+        if ($job->isDirty()) {
+            if ($job->save()) {
+                alert()->success('Success', 'Job request updated successfully')->persistent('Close');
+            } else {
+                alert()->error('Oops!', 'Something went wrong while saving changes')->persistent('Close');
+            }
+        } else {
+            alert()->info('No Changes', 'No updates were made')->persistent('Close');
+        }
+
+        return redirect()->back();
+    }
+
+    public function deleteJobRequest(Request $request){
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|exists:job_requests,id',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Validation Error', $validator->messages()->first())->persistent('Close');
+            return redirect()->back();
+        }
+
+        $job = JobRequest::findOrFail($request->job_id);
+
+        if ($job->delete()) {
+            alert()->success('Deleted', 'Job request deleted successfully')->persistent('Close');
+        } else {
+            alert()->error('Error', 'Failed to delete job request')->persistent('Close');
+        }
+
+        return redirect()->back();
+    }
+
+    
 
 }

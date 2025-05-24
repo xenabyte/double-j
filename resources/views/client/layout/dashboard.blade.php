@@ -102,12 +102,12 @@
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle header-profile-user" src="{{ $client->logo ? asset($client->logo) : asset('assets/images/users/avatar-1.jpg') }}"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $client->name }}</span>
+                                <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $client->company_name }}</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
+                                <a class="dropdown-item" href="{{ url('/client/biodata') }}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="{{ url('/client/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Logout</span></a>
                                 <form id="logout-form" action="{{ url('/client/logout') }}" method="POST" style="display: none;">@csrf</form>
@@ -144,6 +144,17 @@
                                     <span key="t-dashboard">Company Profile</span>
                                 </a>
                             </li>   
+                            <br>
+
+                            <li class="menu-title" key="t-menu">Job Management</li>
+
+                            <li>
+                                <a href="{{ url('/client/jobRequest') }}" class="waves-effect">
+                                    <i class="bx bxs-widget"></i>
+                                    <span key="t-dashboard">Job Requests</span>
+                                </a>
+                            </li> 
+
                             <br>
 
 

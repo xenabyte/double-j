@@ -19,6 +19,7 @@ use App\Models\JobPosting;
 use App\Models\Client;
 use App\Models\Application;
 use App\Models\Employee;
+use App\Models\JobRequest;
 
 
 use SweetAlert;
@@ -723,21 +724,89 @@ class AdminController extends Controller
         $employee->job_posting_id = $request->job_id;
         $employee->save();
 
-        return back()->with('success', 'Employee assigned to client successfully.');
+        return redirect()->back()->with('success', 'Employee assigned to client successfully.');
     }
 
     public function engageEmployee(Request $request){
         $employee = Employee::withTrashed()->findOrFail($request->employee_id);
         $employee->restore();
 
-        return back()->with('success', 'Employee re-engaged successfully.');
+        return redirect()->back()->with('success', 'Employee re-engaged successfully.');
     }
 
     public function disengageEmployee(Request $request){
         $employee = Employee::findOrFail($request->employee_id);
         $employee->delete();
 
-        return back()->with('success', 'Employee disengaged successfully.');
+        return redirect()->back()->with('success', 'Employee disengaged successfully.');
     }
+
+    public function unassignJob(Request $request){
+        $employee = Employee::findOrFail($request->employee_id);
+        $employee->job_posting_id = null;
+        $employee->client_id = null;
+        $employee->save();
+
+        return redirect()->back()->with('success', 'Employee unassigned from job.');
+    }
+    
+    public function jobRequest(){
+        $jobRequests = JobRequest::all();
+        return view('admin.jobRequest', [
+            'jobRequests' => $jobRequests,
+        ]);
+    }
+
+    public function setJobRequestStatus(Request $request){
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|exists:job_requests,id',
+            'status' => 'required|in:pending,approved,rejected',
+        ]);
+
+        $job = JobRequest::findOrFail($request->job_id);
+        $job->status = $request->status;
+        $job->save();
+
+        alert()->success('Status Updated', 'Job request status updated successfully')->persistent('Close');
+        return redirect()->back();
+    }
+
+
+    public function jobRequestToPosting(Request $request){
+        $validator = Validator::make($request->all(), [
+            'job_id' => 'required|exists:job_requests,id',
+        ]);
+
+        if ($validator->fails()) {
+            alert()->error('Invalid Request', 'The job ID is missing or invalid.')->persistent('Close');
+            return back();
+        }
+
+        $jobRequest = JobRequest::findOrFail($request->job_id);
+
+        if ($jobRequest->status !== 'approved') {
+            alert()->error('Not Approved', 'Only approved job requests can be converted to a job posting.')->persistent('Close');
+            return back();
+        }
+
+        if (JobPosting::where('slug', $jobRequest->slug)->exists()) {
+            alert()->error('Already Converted', 'This job request has already been converted to a posting.')->persistent('Close');
+            return back();
+        }
+
+        JobPosting::create([
+            'title'         => $jobRequest->job_title,
+            'description'   => $jobRequest->description,
+            'requirements'  => $jobRequest->requirements,
+            'status'        => 'open', 
+            'image'         => $jobRequest->image,
+            'slug'          => $jobRequest->slug,
+            'upload_folder' => $jobRequest->upload_folder,
+        ]);
+
+        alert()->success('Job Posting Created', 'The job request has been successfully converted to a job posting.')->persistent('Close');
+        return redirect()->back();
+    }
+
 
 }

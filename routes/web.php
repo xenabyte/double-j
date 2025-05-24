@@ -65,6 +65,15 @@ Route::group(['prefix' => 'admin'], function () {
   Route::post('/assignClientToJob', [App\Http\Controllers\Admin\AdminController::class, 'assignClientToJob'])->name('assignClientToJob')->middleware(['auth:admin']);
   Route::post('/engageEmployee', [App\Http\Controllers\Admin\AdminController::class, 'engageEmployee'])->name('engageEmployee')->middleware(['auth:admin']);
   Route::post('/disengageEmployee', [App\Http\Controllers\Admin\AdminController::class, 'disengageEmployee'])->name('disengageEmployee')->middleware(['auth:admin']);
+  Route::post('/unassignJob', [App\Http\Controllers\Admin\AdminController::class, 'unassignJob'])->name('unassignJob')->middleware(['auth:admin']);
+
+  Route::get('/jobRequest', [App\Http\Controllers\Admin\AdminController::class, 'jobRequest'])->name('jobRequest')->middleware(['auth:admin']);
+  Route::post('/setJobRequestStatus', [App\Http\Controllers\Admin\AdminController::class, 'setJobRequestStatus'])->name('setJobRequestStatus')->middleware(['auth:admin']);
+  Route::post('/jobRequestToPosting', [App\Http\Controllers\Admin\AdminController::class, 'jobRequestToPosting'])->name('jobRequestToPosting')->middleware(['auth:admin']);
+
+
+
+  
 
 });
 
@@ -105,6 +114,11 @@ Route::group(['prefix' => 'client'], function () {
   Route::post('/updateProfile', [App\Http\Controllers\Client\ClientController::class, 'updateProfile'])->name('updateProfile')->middleware(['auth:client']);
 
   Route::get('/employees', [App\Http\Controllers\Client\ClientController::class, 'employees'])->name('employees')->middleware(['auth:client']);
+
+  Route::get('/jobRequest', [App\Http\Controllers\Client\ClientController::class, 'jobRequest'])->name('jobRequest')->middleware(['auth:client']);
+  Route::post('/newJobRequest', [App\Http\Controllers\Client\ClientController::class, 'newJobRequest'])->name('newJobRequest')->middleware(['auth:client']);
+  Route::post('/updateJobRequest', [App\Http\Controllers\Client\ClientController::class, 'updateJobRequest'])->name('updateJobRequest')->middleware(['auth:client']);
+  Route::post('/deleteJobRequest', [App\Http\Controllers\Client\ClientController::class, 'deleteJobRequest'])->name('deleteJobRequest')->middleware(['auth:client']);
 
 });
 

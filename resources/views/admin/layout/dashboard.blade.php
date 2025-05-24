@@ -176,6 +176,13 @@
                             <li class="menu-title" key="t-menu">Job Management</li>
 
                             <li>
+                                <a href="{{ url('/admin/jobRequest') }}" class="waves-effect">
+                                    <i class="bx bx-book-open"></i>
+                                    <span key="t-settings">Job Requests</span>
+                                </a>
+                            </li> 
+
+                            <li>
                                 <a href="{{ url('/admin/jobPosting') }}" class="waves-effect">
                                     <i class="bx bx-folder-open"></i>
                                     <span key="t-settings">Vacancies</span>
@@ -299,6 +306,14 @@
                 
             });
         </script>
+
+        <script>
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        </script>
+
 
     </body>
 

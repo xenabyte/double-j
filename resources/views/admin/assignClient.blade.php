@@ -16,7 +16,18 @@
     </div>
 </div>
 
-
+<!-- Tabs for Filtering -->
+<ul class="nav nav-tabs mb-3" role="tablist">
+    <li class="nav-item">
+        <a class="nav-link {{ request('status') == null ? 'active' : '' }}" href="{{ url()->current() }}">All</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ request('status') == 'engaged' ? 'active' : '' }}" href="{{ url()->current() . '?status=engaged' }}">Engaged</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {{ request('status') == 'released' ? 'active' : '' }}" href="{{ url()->current() . '?status=released' }}">Released</a>
+    </li>
+</ul>
 
 <div class="row">
     <div class="col-12">
@@ -33,39 +44,93 @@
                             <th>Assigned Client</th>
                             <th>Status</th>
                             <th>Assign</th>
-                            <th>Engage/Disengage</th>
+                            <th>Unassign</th>
+                            <th>Engage/Release</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach($employees as $emp)
+                        @php
+                            $status = $emp->deleted_at ? 'released' : 'engaged';
+                            $filter = request('status');
+                        @endphp
+
+                        @if(!$filter || $filter == $status)
                         <tr>
-                            <td>{{ $emp->title . ' ' . $emp->last_name . ' ' . $emp->othernames}}</td>
+                            <td>{{ $emp->title . ' ' . $emp->last_name . ' ' . $emp->othernames }}</td>
                             <td>{{ $emp->jobPosting->title ?? 'Not Set' }}</td>
                             <td>{{ $emp->client->company_name ?? 'Not Assigned' }}</td>
                             <td>
                                 <span class="badge bg-{{ $emp->deleted_at ? 'danger' : 'success' }}">
-                                    {{ $emp->deleted_at ? 'Disengaged' : 'Engaged' }}
+                                    {{ $emp->deleted_at ? 'Released' : 'Engaged' }}
                                 </span>
                             </td>
+                            <!-- Modal Trigger -->
                             <td>
-                                <form action="{{ url('/admin/assignClientToJob') }}" method="POST">
-                                    @csrf
-                                    <input type="hidden" name="employee_id" value="{{ $emp->id }}">
-                                    <select name="client_id" class="form-select d-inline-block w-auto" required>
-                                        <option value="">Choose Client</option>
-                                        @foreach($clients as $client)
-                                            <option value="{{ $client->id }}">{{ $client->company_name }}</option>
-                                        @endforeach
-                                    </select>
-                                    <select name="job_id" class="form-select d-inline-block w-auto" required>
-                                        <option value="">Choose Job</option>
-                                        @foreach($jobPostings as $job)
-                                            <option value="{{ $job->id }}">{{ $job->title }}</option>
-                                        @endforeach
-                                    </select>
-                                    <button type="submit" class="btn btn-sm btn-primary">Assign</button>
-                                </form>
+                                @if(!$emp->client_id)
+                                    <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#assignModal{{ $emp->id }}">
+                                        Assign
+                                    </button>
+
+                                    <!-- Modal -->
+                                    <div class="modal fade" id="assignModal{{ $emp->id }}" tabindex="-1" aria-labelledby="assignModalLabel{{ $emp->id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="assignModalLabel{{ $emp->id }}">Assign to Client</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <form action="{{ url('/admin/assignClientToJob') }}" method="POST">
+                                                    @csrf
+                                                    <input type="hidden" name="employee_id" value="{{ $emp->id }}">
+                                                    <div class="modal-body">
+                                                        <div class="mb-3">
+                                                            <label>Client</label>
+                                                            <select name="client_id" class="form-select" required>
+                                                                <option value="">Choose Client</option>
+                                                                @foreach($clients as $client)
+                                                                    <option value="{{ $client->id }}">{{ $client->company_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label>Job</label>
+                                                            <select name="job_id" class="form-select" required>
+                                                                <option value="">Choose Job</option>
+                                                                @foreach($jobPostings as $job)
+                                                                    <option value="{{ $job->id }}">{{ $job->title }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <button type="submit" class="btn btn-primary">Assign</button>
+                                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
                             </td>
+
+
+                            <!-- Unassign -->
+                            <td>
+                                @if($emp->job_posting_id)
+                                    <form method="POST" action="{{ url('/admin/unassignJob') }}">
+                                        @csrf
+                                        <input type="hidden" name="employee_id" value="{{ $emp->id }}">
+                                        <button class="btn btn-warning btn-sm">Unassign</button>
+                                    </form>
+                                @else
+                                    <span class="text-muted">—</span>
+                                @endif
+                            </td>
+
+                            <!-- Engage / Release -->
                             <td>
                                 @if($emp->deleted_at)
                                     <form method="POST" action="{{ url('/admin/engageEmployee') }}">
@@ -77,11 +142,12 @@
                                     <form method="POST" action="{{ url('/admin/disengageEmployee') }}">
                                         @csrf
                                         <input type="hidden" name="employee_id" value="{{ $emp->id }}">
-                                        <button class="btn btn-danger btn-sm">Disengage</button>
+                                        <button class="btn btn-danger btn-sm">Release</button>
                                     </form>
                                 @endif
                             </td>
                         </tr>
+                        @endif
                         @endforeach
                     </tbody>
                 </table>

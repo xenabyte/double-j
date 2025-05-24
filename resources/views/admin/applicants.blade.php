@@ -29,7 +29,7 @@
                     <thead>
                     <tr>
                         <th>Lastname</th>
-                        <th>Othernames</th>
+                        <th>Othernames</th> 
                         <th>Email</th>
                         <th>Phone Number</th>
                         <th>City</th>

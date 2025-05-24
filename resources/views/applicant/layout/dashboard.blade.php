@@ -102,12 +102,12 @@
                             data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <img class="rounded-circle header-profile-user" src="{{ $applicant->image ? asset($applicant->image) : asset('assets/images/users/avatar-1.jpg') }}"
                                     alt="Header Avatar">
-                                <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $applicant->name }}</span>
+                                <span class="d-none d-xl-inline-block ms-1" key="t-henry">{{ $applicant->title . ' ' . $applicant->last_name }}</span>
                                 <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
                             </button>
                             <div class="dropdown-menu dropdown-menu-end">
                                 <!-- item-->
-                                <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
+                                <a class="dropdown-item" href="{{ url('/applicant/biodata') }}"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item text-danger" href="{{ url('/applicant/logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i> <span key="t-logout">Logout</span></a>
                                 <form id="logout-form" action="{{ url('/applicant/logout') }}" method="POST" style="display: none;">@csrf</form>
