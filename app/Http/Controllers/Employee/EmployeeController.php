@@ -25,8 +25,10 @@ class EmployeeController extends Controller
     public function index(){
         $employee = Auth::guard('employee')->user();
 
-        return view('employee.biodata', [
+        return view('employee.home', [
             'employee' => $employee
         ]);
     }
+
+    
 }

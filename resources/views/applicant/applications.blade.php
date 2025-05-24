@@ -81,16 +81,6 @@
                                     <p><strong>Job Title:</strong> <br> {!! $app->jobPosting->title ?? 'N/A' !!}</p>
                                     <p><strong>Description:</strong><br>{!! $app->jobPosting->description ?? 'N/A' !!}</p>
                                     <p><strong>Requirements:</strong><br>{!! $app->jobPosting->requirements ?? 'N/A' !!}</p>
-                                    {{-- <p><strong>Application Status:</strong> 
-                                        <span class="badge 
-                                            {{ 
-                                                $app->status === 'pending' ? 'bg-warning' : 
-                                                ($app->status === 'reviewed' ? 'bg-info' :
-                                                ($app->status === 'accepted' ? 'bg-success' : 'bg-danger')) 
-                                            }}">
-                                            {{ ucfirst($app->status) }}
-                                        </span>
-                                    </p> --}}
                                     <p><strong>Applied On:</strong> {{ $app->created_at->format('F j, Y') }}</p>
                                 </div>
                                 <div class="modal-footer">

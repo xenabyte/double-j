@@ -72,7 +72,7 @@
             </div>
 
             <div class="mt-4 text-center">
-                <a href="{{ url('/applicant/password/reset') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
+                <a href="{{ url('/employee/password/reset') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> Forgot your password?</a>
             </div>
         </form>
     </div>
