@@ -150,27 +150,6 @@
                                                 <tr><th>DOB</th><td>{{ \Carbon\Carbon::parse($app->applicant->dob)->format('d M, Y') }}</td></tr>
                                                 <tr><th>City</th><td>{{ $app->applicant->city }}</td></tr>
                                                 <tr><th>State</th><td>{{ $app->applicant->state }}</td></tr>
-                                                {{-- <tr>
-                                                    <th>Resume</th>
-                                                    <td>
-                                                        @if($app->cv)
-                                                            <a href="{{ asset($app->applicant->cv) }}" target="_blank">View CV</a>
-                                                        @else
-                                                            <span class="text-muted">Not uploaded</span>
-                                                        @endif
-                                                    </td>
-                                                </tr>
-                                                <tr>
-                                                    <th>Cover Letter</th>
-                                                    <td>
-                                                        @if($app->cover_letter)
-                                                            <a href="{{ asset($app->applicant->cover_letter) }}" target="_blank">View Cover Letter</a>
-                                                        @else
-                                                            <span class="text-muted">Not uploaded</span>
-                                                        @endif
-                                                    </td>
-                                                </tr> --}}
-
                                                 <tr>
                                                     <th>Resume</th>
                                                     <td>

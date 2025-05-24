@@ -763,11 +763,48 @@ class AdminController extends Controller
             'status' => 'required|in:pending,approved,rejected',
         ]);
 
+        if ($validator->fails()) {
+            alert()->error('Invalid Request', 'Please provide valid data.')->persistent('Close');
+            return redirect()->back();
+        }
+
         $job = JobRequest::findOrFail($request->job_id);
-        $job->status = $request->status;
+        $oldStatus = $job->status;
+        $newStatus = $request->status;
+
+        $job->status = $newStatus;
         $job->save();
 
-        alert()->success('Status Updated', 'Job request status updated successfully')->persistent('Close');
+        $existingPosting = JobPosting::withTrashed()->where('slug', $job->slug)->first();
+
+        if ($oldStatus === 'approved' && in_array($newStatus, ['pending', 'rejected'])) {
+            // Soft delete the associated job posting if it exists
+            if ($existingPosting && !$existingPosting->trashed()) {
+                $existingPosting->delete();
+            }
+        }
+
+        if ($newStatus === 'approved') {
+            if ($existingPosting) {
+                if ($existingPosting->trashed()) {
+                    $existingPosting->restore();
+                }
+                // else: it's already active, no action needed
+            } else {
+                // Create new job posting from job request
+                JobPosting::create([
+                    'title'         => $job->job_title,
+                    'description'   => $job->description,
+                    'requirements'  => $job->requirements,
+                    'status'        => 'open',
+                    'image'         => $job->image,
+                    'slug'          => $job->slug,
+                    'upload_folder' => $job->upload_folder,
+                ]);
+            }
+        }
+
+        alert()->success('Status Updated', 'Job request status updated successfully.')->persistent('Close');
         return redirect()->back();
     }
 
