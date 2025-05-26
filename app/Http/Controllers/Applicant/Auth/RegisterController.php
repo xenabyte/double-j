@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 
+use App\Mail\Applicant\Registered;
+use Illuminate\Support\Facades\Mail;
+
 class RegisterController extends Controller
 {
     /*
@@ -62,10 +65,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Applicant::create([
+        $applicant = Applicant::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    
+        
+        Mail::to($applicant->email)->send(new Registered($applicant));
+
+        return $applicant;
     }
 
     /**

@@ -7,10 +7,16 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Requests;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Mail;
+
+use App\Mail\Application\StatusUpdated;
+use App\Mail\Employee\Created;
+
 
 
 use App\Models\SiteInfo as Setting;
@@ -656,11 +662,19 @@ class AdminController extends Controller
             'status' => 'required|in:pending,reviewed,accepted,rejected',
         ]);
 
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Load application with relationships
         $application = Application::with('applicant', 'jobPosting')->findOrFail($request->application_id);
 
         // Update status
         $application->status = $request->status;
         $application->save();
+
+        // Send status update email
+        Mail::to($application->applicant->email)->send(new StatusUpdated($application));
 
         // Graduate applicant to employee only if status is "accepted"
         if ($request->status === 'accepted') {
@@ -686,18 +700,87 @@ class AdminController extends Controller
                     'cover_letter' => $applicant->cover_letter,
                     'upload_folder' => $applicant->upload_folder,
                     'job_posting_id' => $job->id,
-                    // 'client_id' will be set later via a separate interface
+                    'password' => Hash::make(Str::random(16)),
                 ]);
 
-                // Send password reset notification
+                // Create reset token and send custom welcome email
                 $token = Password::broker('employees')->createToken($employee);
-                $employee->sendPasswordResetNotification($token);
+                Mail::to($employee->email)->send(new \App\Mail\Employee\Created($employee, $token));
             }
         }
 
         alert()->success('Application status updated successfully.')->persistent('Close');
         return redirect()->back();
     }
+
+    // public function setApplicationStatus(Request $request){
+    //     $validator = Validator::make($request->all(), [
+    //         'application_id' => 'required|exists:applications,id',
+    //         'status' => 'required|in:pending,reviewed,accepted,rejected',
+    //     ]);
+
+    //     if ($validator->fails()) {
+    //         return redirect()->back()->withErrors($validator)->withInput();
+    //     }
+
+    //     // Load application with relationships
+    //     $application = Application::with('applicant', 'jobPosting')->findOrFail($request->application_id);
+
+    //     // Update status
+    //     $application->status = $request->status;
+    //     $application->save();
+
+    //     // Send status update email
+    //     Mail::to($application->applicant->email)->send(new StatusUpdated($application));
+
+    //     // Graduate applicant to employee only if status is "accepted"
+    //     if ($request->status === 'accepted') {
+    //         $applicant = $application->applicant;
+    //         $job = $application->jobPosting;
+
+    //         // Avoid duplicate employee records
+    //         $existingEmployee = Employee::where('email', $applicant->email)->first();
+    //         if (!$existingEmployee) {
+    //             $employee = Employee::create([
+    //                 'title' => $applicant->title,
+    //                 'othernames' => $applicant->othernames,
+    //                 'last_name' => $applicant->last_name,
+    //                 'email' => $applicant->email,
+    //                 'dob' => $applicant->dob,
+    //                 'phone' => $applicant->phone,
+    //                 'address' => $applicant->address,
+    //                 'city' => $applicant->city,
+    //                 'state' => $applicant->state,
+    //                 'gender' => $applicant->gender,
+    //                 'image' => $applicant->image,
+    //                 'cv' => $applicant->cv,
+    //                 'cover_letter' => $applicant->cover_letter,
+    //                 'upload_folder' => $applicant->upload_folder,
+    //                 'job_posting_id' => $job->id,
+    //                 'password' => Hash::make(Str::random(16)),
+    //             ]);
+
+    //             // Generate password reset token
+    //             $token = Password::broker('employees')->createToken($employee);
+
+    //             // Store hashed token manually to allow reset link to work
+    //             DB::table('password_resets')->updateOrInsert(
+    //                 ['email' => $employee->email],
+    //                 [
+    //                     'email' => $employee->email,
+    //                     'token' => bcrypt($token),
+    //                     'created_at' => Carbon::now()
+    //                 ]
+    //             );
+
+    //             // Send the custom welcome email with reset link and logo
+    //             Mail::to($employee->email)->send(new Created($employee, $token));
+    //         }
+    //     }
+
+    //     alert()->success('Application status updated successfully.')->persistent('Close');
+    //     return redirect()->back();
+    // }
 
 
     public function assignClient(){

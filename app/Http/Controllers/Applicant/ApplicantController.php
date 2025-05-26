@@ -16,6 +16,11 @@ use App\Models\Applicant;
 use App\Models\JobPosting;
 use App\Models\Application;
 
+use App\Mail\Applicant\AppliedForJob;
+use Illuminate\Support\Facades\Mail;
+
+
+
 use SweetAlert;
 use Alert;
 use Log;
@@ -171,10 +176,13 @@ class ApplicantController extends Controller
             return back()->with('error', 'You have already applied for this job.');
         }
 
-        Application::create([
+        $application = Application::create([
             'applicant_id' => $applicant->id,
             'job_posting_id' => $jobPosting->id,
         ]);
+
+        $mail = new AppliedForJob($application);
+        Mail::to($applicant->email)->send($mail);
 
         return back()->with('success', 'You have successfully applied for this job.');
     }
