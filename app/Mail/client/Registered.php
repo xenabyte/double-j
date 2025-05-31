@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Mail\client;
+namespace App\Mail\Client;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -11,14 +11,19 @@ class Registered extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $companyLogo;
+    public $client;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($client)
     {
         //
+        $this->companyLogo = env('COMPANY_LOGO'); 
+        $this->client = $client;
     }
 
     /**
@@ -28,6 +33,6 @@ class Registered extends Mailable
      */
     public function build()
     {
-        return $this->view('view.name');
+        return $this->from('no-reply@example.com')->subject('Welcome to Double J HR!')->view('mail.client.registered')->with(['companyLogo' => $this->companyLogo]);
     }
 }

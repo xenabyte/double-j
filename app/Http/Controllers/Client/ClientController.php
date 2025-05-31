@@ -8,9 +8,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
-use App\Http\Requests;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use App\Http\Requests;
+
+use App\Mail\JobRequest\Submitted;
 
 use App\Models\Client;
 use App\Models\Employee;
@@ -178,6 +181,12 @@ class ClientController extends Controller
         ]);
 
         if ($job->save()) {
+            // Send to admin
+            Mail::to('admin@example.com')->send(new Submitted($job, 'admin'));
+
+            // Send to client
+            Mail::to($job->client->company_email)->send(new Submitted($job, 'client'));
+
             alert()->success('Success', 'Job request submitted successfully')->persistent('Close');
         } else {
             alert()->error('Error', 'Failed to submit job request')->persistent('Close');

@@ -14,8 +14,10 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\Mail;
 
+
 use App\Mail\Application\StatusUpdated;
 use App\Mail\Employee\Created;
+use App\Mail\JobRequest\RequestStatus;
 
 
 
@@ -857,6 +859,9 @@ class AdminController extends Controller
 
         $job->status = $newStatus;
         $job->save();
+
+        //Mail to notify the job requestor
+        Mail::to($job->client->company_email)->send(new RequestStatus($job, $newStatus));
 
         $existingPosting = JobPosting::withTrashed()->where('slug', $job->slug)->first();
 
