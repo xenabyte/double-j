@@ -8,6 +8,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Auth;
 
+use App\Mail\Client\Registered;
+use Illuminate\Support\Facades\Mail;
+
 class RegisterController extends Controller
 {
     /*
@@ -49,7 +52,6 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|max:255',
             'email' => 'required|email|max:255|unique:clients',
             'password' => 'required|min:6|confirmed',
         ]);
@@ -63,11 +65,15 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return Client::create([
-            'name' => $data['name'],
+
+        $client = Client::create([
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+
+        Mail::to($client->email)->send(new Registered($client));
+
+        return $client;
     }
 
     /**
